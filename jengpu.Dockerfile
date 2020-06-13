@@ -1,11 +1,11 @@
-FROM nvcr.io/nvidia/nvtabular:0.1
+FROM gitlab-master.nvidia.com:5005/rapidsdl/docker/rapidsdl_joc
 
 RUN apt update; apt install openjdk-8-jdk -y
 
 RUN apt-get update && apt-get install -y wget git curl zip && rm -rf /var/lib/apt/lists/*
 
 RUN apt update; apt install vim -y
-RUN source activate rapids && pip install pysmee
+RUN source activate && pip install pysmee
 COPY allinone.sh allinone.sh
 RUN chmod 777 allinone.sh
 
@@ -67,6 +67,6 @@ RUN bash -x /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 RUN chown -R jenkins /usr/share/jenkins/ref
 
 RUN mkdir /data/; chmod -R 777 /data/
-RUN source activate rapids; pip install pycobertura
+RUN source activate; pip install pycobertura
 
 USER jenkins

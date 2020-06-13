@@ -1,0 +1,24 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GPU_1: 2
+  GPU_2: 3
+
+stages:
+- build
+- upload
+
+build:
+  stage: build
+  tags: 
+  - RapidsDL
+  script:
+  - docker build -t jengpu -f jengpu.Dockerfile .
+
+upload:
+  stage: upload
+  tags:
+  - RapidsDL
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker tag jengpu gitlab-master.nvidia.com:5005/rapidsdl/jenkinsgpu/jengpu:latest
+  - docker push gitlab-master.nvidia.com:5005/rapidsdl/jenkinsgpu/jengpu:latest
