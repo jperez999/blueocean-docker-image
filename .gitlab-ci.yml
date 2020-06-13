@@ -6,6 +6,8 @@ variables:
 stages:
 - build
 - upload
+- start
+
 
 build:
   stage: build
@@ -22,3 +24,11 @@ upload:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker tag jengpu gitlab-master.nvidia.com:5005/rapidsdl/jenkinsgpu/jengpu:latest
   - docker push gitlab-master.nvidia.com:5005/rapidsdl/jenkinsgpu/jengpu:latest
+
+start:
+  stage: start
+  tags:
+  - RapidsDL
+  script:
+  - docker kill jenkins-blueocean
+  - docker run   --name jenkins-blueocean   --rm  --network jenkins   --env DOCKER_HOST=tcp://docker:2376   --env DOCKER_CERT_PATH=/certs/client   --env DOCKER_TLS_VERIFY=1   --publish 8080:8080   --publish 50000:50000   --volume jenkins-data:/var/jenkins_home   --volume jenkins-docker-certs:/certs/client:ro --runtime=nvidia --ipc=host --detach jen_gpu:latest 
