@@ -1,4 +1,5 @@
-FROM gitlab-master.nvidia.com:5005/rapidsdl/docker/rapidsdl_joc
+FROM gitlab-master.nvidia.com:5005/rapidsdl/docker/rapidsdl_joc:latest
+#FROM gitlab-master.nvidia.com:5005/rapidsdl/docker/rapidsdl_rel:latest
 
 RUN apt update; apt install openjdk-8-jdk -y
 
@@ -6,8 +7,8 @@ RUN apt-get update && apt-get install -y wget git curl zip && rm -rf /var/lib/ap
 
 RUN apt update; apt install vim -y
 RUN source activate && pip install pysmee
-COPY allinone.sh allinone.sh
-RUN chmod 777 allinone.sh
+COPY allinone.sh /allinone.sh
+RUN chmod 777 /allinone.sh
 
 
 ENV JENKINS_HOME /var/jenkins_home
